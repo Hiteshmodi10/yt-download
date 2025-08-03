@@ -1,2 +1,2 @@
-flask
-yt-dlp
+flask==2.3.3
+yt-dlp==2023.7.6

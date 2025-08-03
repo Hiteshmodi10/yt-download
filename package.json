@@ -1,0 +1,23 @@
+{
+  "name": "youtube-downloader",
+  "version": "1.0.0",
+  "description": "A simple YouTube video downloader deployed on Vercel",
+  "main": "api/index.py",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "youtube",
+    "downloader",
+    "video",
+    "vercel",
+    "python",
+    "flask"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}
