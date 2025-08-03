@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple YouTube Downloader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .youtube-icon {
+            color: #ff0000;
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .url-input-section {
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #videoUrl {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+            background: #f8f9fa;
+        }
+
+        #videoUrl:focus {
+            background: white;
+        }
+
+        .copy-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #138496;
+        }
+
+        .download-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .download-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .download-option:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: #333;
+        }
+
+        .option-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #667eea;
+        }
+
+        .option-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .instructions {
+            background: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .status {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .quality-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quality-info h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .quality-info p {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="youtube-icon">📺</div>
+            <h1>YouTube Downloader</h1>
+            <p>Simple tool to download YouTube videos in original quality</p>
+        </div>
+
+        <div class="url-input-section">
+            <div class="input-group">
+                <input type="text" id="videoUrl" placeholder="Paste YouTube video URL here..." />
+                <button class="copy-btn" onclick="copyUrl()">Copy URL</button>
+            </div>
+        </div>
+
+        <div id="status" class="status">
+            URL copied to clipboard! Now click on your preferred download option below.
+        </div>
+
+        <div class="quality-info">
+            <h4>🎯 Original Quality Download</h4>
+            <p>The download tools below will automatically detect and offer the highest quality available for your video.</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Use:</h3>
+            <ol>
+                <li>Paste your YouTube video URL in the box above</li>
+                <li>Click "Copy URL" to copy it to your clipboard</li>
+                <li>Choose one of the download options below</li>
+                <li>Paste the URL on the download site</li>
+                <li>Select your desired quality and download!</li>
+            </ol>
+        </div>
+
+        <div class="download-options">
+            <a href="https://yt1s.com" target="_blank" class="download-option" onclick="trackClick('yt1s')">
+                <div class="option-title">🚀 YT1s.com (Recommended)</div>
+                <div class="option-description">Fast, reliable, supports 4K quality. No registration required.</div>
+            </a>
+
+            <a href="https://y2meta.com" target="_blank" class="download-option" onclick="trackClick('y2meta')">
+                <div class="option-title">⚡ Y2Meta.com</div>
+                <div class="option-description">Quick downloads, multiple format options, good quality preservation.</div>
+            </a>
+
+            <a href="https://savefrom.net" target="_blank" class="download-option" onclick="trackClick('savefrom')">
+                <div class="option-title">💾 SaveFrom.net</div>
+                <div class="option-description">Popular choice, supports various video platforms, reliable service.</div>
+            </a>
+
+            <a href="https://ytmp3.cc" target="_blank" class="download-option" onclick="trackClick('ytmp3')">
+                <div class="option-title">🎵 YTMP3.cc</div>
+                <div class="option-description">Great for both video and audio downloads, high quality options.</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            <p><strong>Privacy Notice:</strong> This tool doesn't store or process your URLs. All downloads happen directly through the external services.</p>
+            <p><strong>Legal Notice:</strong> Please respect YouTube's Terms of Service and copyright laws.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyUrl() {
+            const urlInput = document.getElementById('videoUrl');
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please paste a YouTube URL first!');
+                return;
+            }
+
+            // Validate YouTube URL
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+            if (!youtubeRegex.test(url)) {
+                alert('Please enter a valid YouTube URL!');
+                return;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(url).then(function() {
+                showStatus();
+            }, function(err) {
+                // Fallback for older browsers
+                urlInput.select();
+                document.execCommand('copy');
+                showStatus();
+            });
+        }
+
+        function showStatus() {
+            const status = document.getElementById('status');
+            status.classList.add('show');
+            
+            setTimeout(() => {
+                status.classList.remove('show');
+            }, 5000);
+        }
+
+        function trackClick(service) {
+            console.log(`User clicked on ${service}`);
+            // You can add analytics tracking here if needed
+        }
+
+        // Handle Enter key in input
+        document.getElementById('videoUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                copyUrl();
+            }
+        });
+
+        // Auto-focus on URL input
+        document.getElementById('videoUrl').focus();
+    </script>
+</body>
+</html>
